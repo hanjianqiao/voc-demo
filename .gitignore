@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# DS file
+.DS_Store
+
+# Private file
+*.pri
