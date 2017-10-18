@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+   <title>加密视频测试页面</title>
+   <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/1.9.4/skins/default/index-min.css" />
+   <script type="text/javascript" src="https://g.alicdn.com/de/prismplayer/1.9.4/prism-flash-min.js"></script>
+ </head>
+ <body>
+   <div class="prism-player" id="J_prismPlayer"></div>
+   <script type="text/javascript">
+    (function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      
+     var player = new prismplayer({
+                          id: 'J_prismPlayer',
+                          width: '100%',
+                          height:'540px',
+                          barMode: 0,
+                          vid: '02b8629a59624038a8448667ab43e653',
+                          playauth: this.responseText
+                 });
+    }
+  };
+  xhttp.open("GET", "query?video_id=02b8629a59624038a8448667ab43e653", true);
+  xhttp.send();
+})();
+   </script>
+ </body>
+ </html>
