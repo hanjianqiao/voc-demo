@@ -14,7 +14,10 @@ app = Flask(__name__, static_url_path='/', static_folder='./html/')
 
 config = configparser.ConfigParser()
 config.read('configure.pri')
-clt = client.AcsClient(config['UserKey']['accesskeyid'], config['UserKey']['accesskeysecret'], 'cn-shanghai')
+ukid = config['UserKey']['accesskeyid']
+ukas = config['UserKey']['accesskeysecret']
+clt = client.AcsClient(ukid, ukas, 'cn-shanghai')
+
 
 def get_video_playauth(clt, video_id):
         request = GetVideoPlayAuthRequest.GetVideoPlayAuthRequest()
@@ -23,15 +26,28 @@ def get_video_playauth(clt, video_id):
         response = json.loads(clt.do_action_with_exception(request))
         return response
 
+
 def get_all_category():
     param = {'Action': 'GetCategories', 'CateId': -1, 'Version': '2017-03-21'}
-    path = rpc_signature_composer.get_signed_url(param, 'LTAIO4kBbNZeaeAa', 'JKCQ5GgsOr7J3zt4lHBNoEf0GpOM4P', 'JSON', 'GET', [])
+    path = rpc_signature_composer.get_signed_url(param, ukid, ukas, 'JSON', 'GET', [])
     domain = 'vod.cn-shanghai.aliyuncs.com'
     connection = http.client.HTTPConnection(domain)
     connection.request('GET', path)
     response = connection.getresponse()
     ret = (response.read().decode())
     return ret
+
+
+def get_video_list(cateId):
+    param = {'Action': 'GetVideoList', 'CateId': cateId, 'Version': '2017-03-21'}
+    path = rpc_signature_composer.get_signed_url(param, ukid, ukas, 'JSON', 'GET', [])
+    domain = 'vod.cn-shanghai.aliyuncs.com'
+    connection = http.client.HTTPConnection(domain)
+    connection.request('GET', path)
+    response = connection.getresponse()
+    ret = (response.read().decode())
+    return ret
+
 
 # print(get_video_playauth(clt)['PlayAuth'])
 
@@ -50,6 +66,12 @@ def query():
 @app.route('/cate', methods=['GET'])
 def getCate():
     return get_all_category()
+
+
+@app.route('/list', methods=['GET'])
+def getList():
+    cateId = request.args.get('id')
+    return get_video_list(cateId)
 
 
 if __name__ == "__main__":
