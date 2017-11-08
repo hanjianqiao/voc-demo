@@ -49,6 +49,29 @@ def get_video_list(cateId):
     return ret
 
 
+def get_all_video_list():
+    param = {'Action': 'GetVideoList', 'Version': '2017-03-21'}
+    path = rpc_signature_composer.get_signed_url(param, ukid, ukas, 'JSON', 'GET', [])
+    domain = 'vod.cn-shanghai.aliyuncs.com'
+    connection = http.client.HTTPConnection(domain)
+    connection.request('GET', path)
+    response = connection.getresponse()
+    ret = (response.read().decode())
+    return ret
+
+
+def get_up_auth(title, filename, cateid):
+    if cateid == None:
+        cateid = 755789223
+    param = {'Action': 'CreateUploadVideo', 'Title': title, 'FileName': filename, 'CateId': cateid,'Version': '2017-03-21'}
+    path = rpc_signature_composer.get_signed_url(param, ukid, ukas, 'JSON', 'GET', [])
+    domain = 'vod.cn-shanghai.aliyuncs.com'
+    connection = http.client.HTTPConnection(domain)
+    connection.request('GET', path)
+    response = connection.getresponse()
+    ret = (response.read().decode())
+    return ret
+
 # print(get_video_playauth(clt)['PlayAuth'])
 
 @app.route('/<path:filename>')
@@ -72,6 +95,15 @@ def getCate():
 def getList():
     cateId = request.args.get('id')
     return get_video_list(cateId)
+
+
+@app.route('/all', methods=['GET'])
+def getAllList():
+    return get_all_video_list()
+
+@app.route('/upauth', methods=['GET'])
+def getUpAuth():
+    return get_up_auth(request.args.get('title'), request.args.get('filename'), request.args.get('cateid'))
 
 
 if __name__ == "__main__":

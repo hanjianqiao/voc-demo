@@ -9,12 +9,21 @@
  <body>
    <div class="prism-player" id="J_prismPlayer"></div>
    <script type="text/javascript">
+   function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
     (function loadDoc() {
-      var video_id = '077def3173414403bd6943840b2eceb7';
+      var video_id = getParameterByName('video_id');
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      
+
      var player = new prismplayer({
                           id: 'J_prismPlayer',
                           width: '100%',
