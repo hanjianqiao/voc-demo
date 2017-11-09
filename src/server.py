@@ -72,6 +72,16 @@ def get_up_auth(title, filename, cateid):
     ret = (response.read().decode())
     return ret
 
+
+def get_video_path(video_id):
+    param = {'Action': 'GetPlayInfo', 'VideoId': video_id, 'Version': '2017-03-21'}
+    path = rpc_signature_composer.get_signed_url(param, ukid, ukas, 'JSON', 'GET', [])
+    domain = 'vod.cn-shanghai.aliyuncs.com'
+    connection = http.client.HTTPConnection(domain)
+    connection.request('GET', path)
+    response = connection.getresponse()
+    ret = (response.read().decode())
+    return ret
 # print(get_video_playauth(clt)['PlayAuth'])
 
 @app.route('/<path:filename>')
@@ -97,6 +107,12 @@ def getList():
     return get_video_list(cateId)
 
 
+@app.route('/playpath', methods=['GET'])
+def getVideoPath():
+    video_id = request.args.get('video_id')
+    return get_video_path(video_id)
+
+
 @app.route('/all', methods=['GET'])
 def getAllList():
     return get_all_video_list()
@@ -107,4 +123,4 @@ def getUpAuth():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
