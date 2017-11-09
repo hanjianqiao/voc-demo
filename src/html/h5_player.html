@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+   <title>加密视频测试页面</title>
+   <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.2.0/skins/default/aliplayer-min.css" />
+   <script type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.2.0/aliplayer-h5-min.js"></script>
+ </head>
+ <body>
+   <div class="prism-player" id="J_prismPlayer"></div>
+   <script type="text/javascript">
+   function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+    (function loadDoc() {
+      var video_id = getParameterByName('video_id');
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var obj = JSON.parse(this.responseText);
+                 var player = new Aliplayer({
+               id: "J_prismPlayer",
+                    autoplay: true,
+                    isLive:false,
+                    playsinline:true,
+                    width:"100%",
+                    height:"400px",
+                    controlBarVisibility:"always",
+                    useH5Prism:true,
+                    useFlashPrism:false,
+                    source:obj.PlayInfoList.PlayInfo[0].PlayURL,
+                    cover:""
+           });
+    }
+  };
+  xhttp.open("GET", "playpath?video_id="+video_id, true);
+  xhttp.send();
+})();
+   </script>
+ </body>
+ </html>
