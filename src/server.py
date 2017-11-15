@@ -139,6 +139,10 @@ def getAllList():
 def getUpAuth():
     return get_up_auth(request.args.get('title'), request.args.get('filename'), request.args.get('cateid'))
 
+@app.route('/')
+def hello():
+    return redirect("/category.html", code=302)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
