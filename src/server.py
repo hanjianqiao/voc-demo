@@ -27,8 +27,10 @@ def get_video_playauth(clt, video_id):
         return response
 
 
-def get_all_category():
-    param = {'Action': 'GetCategories', 'CateId': -1, 'Version': '2017-03-21'}
+def get_sub_category(cate_id = None):
+    if cate_id == None:
+        cate_id = -1
+    param = {'Action': 'GetCategories', 'CateId': cate_id, 'Version': '2017-03-21'}
     path = rpc_signature_composer.get_signed_url(param, ukid, ukas, 'JSON', 'GET', [])
     domain = 'vod.cn-shanghai.aliyuncs.com'
     connection = http.client.HTTPConnection(domain)
@@ -98,7 +100,8 @@ def query():
 
 @app.route('/cate', methods=['GET'])
 def getCate():
-    return get_all_category()
+    cate_id = request.args.get('cate_id')
+    return get_sub_category(cate_id)
 
 
 @app.route('/list', methods=['GET'])
