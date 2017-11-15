@@ -86,6 +86,21 @@ def get_video_path(video_id):
     return ret
 # print(get_video_playauth(clt)['PlayAuth'])
 
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
+
+
 @app.route('/<path:filename>')
 def send_js(filename):
     print(filename)
